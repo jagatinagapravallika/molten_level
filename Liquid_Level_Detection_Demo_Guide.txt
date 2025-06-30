@@ -1,0 +1,97 @@
+
+#  Molten Metal / Liquid Level Detection – Project Overview
+
+##  Objective
+To detect **liquid levels (like molten metal or water)** in vessels using a camera feed and display the level as a **percentage** using **OpenCV** and optionally **MobileNet SSD** object detection.
+
+---
+
+##  Input
+- **Live camera stream** (`cv2.VideoCapture(0)`)
+- Can also be changed to a **video file** by replacing `0` with a file path
+
+---
+
+##  Output Display
+The program displays three windows:
+1. **Original** — Raw input camera frame
+2. **Vessel & Mould Level Detection** — With boxes, level lines, labels
+3. **Threshold** — Binary image showing liquid/mould detection
+
+---
+
+##  Expected Output (Live Window)
+- Bounding box around vessel (e.g. `Liquid_Metal_Level` or `cup`)
+- Top of the liquid is marked with a **yellow horizontal line**
+- Liquid fill percentage like `Mould: 76.5%`
+- Type of vessel and shape detected (e.g. `Shape: standard_Liquid_Metal_Level`)
+- If tracking is active: a red trail showing previous level positions
+
+---
+
+##  How to Run
+1. Make sure dependencies are installed:
+```bash
+pip install opencv-python imutils numpy
+```
+
+2. Ensure the following model files are present in your folder:
+   - `MobileNetSSD_deploy.prototxt`
+   - `MobileNetSSD_deploy.caffemodel` (manual download)
+
+3. Run the program:
+```bash
+python liquid_level_detection.py
+```
+
+4. View the live windows and observe the vessel detection and mould/liquid level analysis.
+
+5. Press **'q' or ESC** to exit.
+
+---
+
+## Example Scenario
+
+Imagine a steel plant where a glowing **blue molten metal** fills a container.
+
+When detected:
+- The vessel is boxed.
+- If filled halfway, it will show: `Mould: 50.0%`.
+- As more molten metal is poured, the yellow line rises.
+- When it crosses a threshold (say 90%), alerts can be added.
+
+---
+
+##  Tip: Add Alert (Optional)
+You can add alert logic like this:
+
+```python
+if Mould_info['percentage'] > 90:
+    print("⚠️ Warning: Liquid level too high!")
+    # Optional: trigger buzzer or send notification
+```
+
+---
+
+##  Output Snapshot (What You See)
+
+```
++----------------------------------------+
+| Vessel: Liquid_Metal_Level (0.87)      |
+| Mould: 76.3%                           |
+| Shape: standard_Liquid_Metal_Level     |
+| [========= vessel bounding box =====]  |
+|                ----                    | <-- yellow line showing level
+|                                        |
++----------------------------------------+
+```
+
+---
+
+##  Summary
+This system allows **real-time**, **non-contact** level monitoring of vessels with support for:
+- AI object detection (MobileNet SSD)
+- HSV + threshold-based liquid segmentation
+- Percentage level tracking
+- Visual alerts and tracking trail
+
